@@ -1,5 +1,15 @@
-const Header = () => {
-  return <div>Header</div>;
-};
+import styled from 'styled-components'
 
-export default Header;
+const Header = () => {
+  return (
+    <HeaderContainer>
+      <h1>Header</h1>
+    </HeaderContainer>
+  )
+}
+const HeaderContainer = styled.div`
+  color: red;
+`
+
+export default Header
+
