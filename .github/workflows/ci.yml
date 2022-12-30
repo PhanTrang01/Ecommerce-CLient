@@ -6,6 +6,7 @@ on:
       - develop
     paths:
       - .github/workflows/**
+      - .
 name: CI
 jobs:
   lint:
