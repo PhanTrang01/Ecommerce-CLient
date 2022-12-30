@@ -1,8 +1,9 @@
-name: CI
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - .github/workflows/**
+name: CI
 jobs:
   lint:
     name: Lint
