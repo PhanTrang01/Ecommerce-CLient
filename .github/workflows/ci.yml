@@ -4,9 +4,9 @@ on:
     branches:
       - main
       - develop
-    types: [opened]
     paths:
       - .github/workflows/**
+      - .
 jobs:
   lint:
     name: Lint
