@@ -1,9 +1,54 @@
-import React from "react";
+import { MouseEventHandler, useContext, useState } from "react";
 import Image from "next/image";
 import LoginBg from "../assets/img/login-bg.jpg";
 import styled from "styled-components";
+import axios from "axios";
+import { setCookie } from "cookies-next";
+import { ToastContext } from "../contexts/ToastContext";
+import { useRouter } from "next/router";
+
+type UserLogin = {
+  email: string;
+  password: string;
+};
 
 const Login = () => {
+  const router = useRouter();
+
+  const [dataLogin, setDataLogin] = useState<UserLogin>({
+    email: "",
+    password: "",
+  });
+
+  const { notify } = useContext(ToastContext);
+
+  const login = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/auth/login",
+        dataLogin
+      );
+      if (res.status === 200) {
+        console.log(new Date(res.data.expires_in));
+        setCookie("token", `${res.data.token_type} ${res.data.access_token}`, {
+          expires: new Date(res.data.expires_in),
+        });
+        notify("success", "Đăng nhập thành công!!");
+        router.push("/");
+      } else {
+        notify("error", "Đăng nhập thất bại!!");
+      }
+    } catch (error) {
+      notify("error", "Có lỗi xảy ra, vui lòng thử lại!");
+      console.log(error);
+    }
+  };
+
+  const loginSubmit: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    e.preventDefault();
+    await login();
+  };
+
   return (
     <LoginContainer>
       <LoginContent>
@@ -25,6 +70,10 @@ const Login = () => {
                   id="email"
                   type="text"
                   placeholder="Input your email"
+                  value={dataLogin.email}
+                  onChange={(e) =>
+                    setDataLogin({ ...dataLogin, email: e.target.value })
+                  }
                 />
               </div>
               <div>
@@ -33,13 +82,17 @@ const Login = () => {
                   id="password"
                   type="password"
                   placeholder="Enter your password"
+                  value={dataLogin.password}
+                  onChange={(e) =>
+                    setDataLogin({ ...dataLogin, password: e.target.value })
+                  }
                 />
               </div>
             </LoginInputContainer>
           </div>
           <div>
             <LoginBtnContainer>
-              <LoginButton>Login</LoginButton>
+              <LoginButton onClick={loginSubmit}>Login</LoginButton>
               <RegisterButton>Sign Up</RegisterButton>
             </LoginBtnContainer>
             <LoginForgot href="#">Forgot Password?</LoginForgot>
