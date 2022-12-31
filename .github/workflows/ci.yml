@@ -2,12 +2,9 @@ name: CI
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    branches:
-      - main
-      - develop
     paths:
       - .github/workflows/**
-      - .
+      - "**"
 jobs:
   lint:
     name: Lint
