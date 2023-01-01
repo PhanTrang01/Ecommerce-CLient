@@ -33,7 +33,7 @@ const Login = () => {
         setCookie("token", `${res.data.token_type} ${res.data.access_token}`, {
           expires: new Date(res.data.expires_in),
         });
-        notify("success", "Đăng nhập thành công!!");
+        notify("success", "Đăng nhập thành công🙂");
         router.push("/");
       } else {
         notify("error", "Đăng nhập thất bại!!");
