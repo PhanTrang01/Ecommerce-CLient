@@ -6,6 +6,7 @@ import axios from "axios";
 import { setCookie } from "cookies-next";
 import { ToastContext } from "../contexts/ToastContext";
 import { useRouter } from "next/router";
+import { handleLoginError } from "../utils/handleError";
 
 type UserLogin = {
   email: string;
@@ -28,19 +29,13 @@ const Login = () => {
         "http://localhost:8000/api/auth/login",
         dataLogin
       );
-      if (res.status === 200) {
-        console.log(new Date(res.data.expires_in));
-        setCookie("token", `${res.data.token_type} ${res.data.access_token}`, {
-          expires: new Date(res.data.expires_in),
-        });
-        notify("success", "Đăng nhập thành công🙂");
-        router.push("/");
-      } else {
-        notify("error", "Đăng nhập thất bại!!");
-      }
+      setCookie("token", `${res.data.token_type} ${res.data.access_token}`, {
+        expires: new Date(res.data.expires_in),
+      });
+      notify("success", "Đăng nhập thành công🙂");
+      router.push("/");
     } catch (error) {
-      notify("error", "Có lỗi xảy ra, vui lòng thử lại!");
-      console.log(error);
+      handleLoginError(error);
     }
   };
 
@@ -93,7 +88,14 @@ const Login = () => {
           <div>
             <LoginBtnContainer>
               <LoginButton onClick={loginSubmit}>Login</LoginButton>
-              <RegisterButton>Sign Up</RegisterButton>
+              <RegisterButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push("/register");
+                }}
+              >
+                Sign Up
+              </RegisterButton>
             </LoginBtnContainer>
             <LoginForgot href="#">Forgot Password?</LoginForgot>
           </div>
