@@ -7,6 +7,7 @@ import { setCookie } from "cookies-next";
 import { ToastContext } from "../contexts/ToastContext";
 import { useRouter } from "next/router";
 import { handleLoginError } from "../utils/handleError";
+import { UserContext } from "../contexts/UserContext";
 
 type UserLogin = {
   email: string;
@@ -22,6 +23,7 @@ const Login = () => {
   });
 
   const { notify } = useContext(ToastContext);
+  const { getUser } = useContext(UserContext);
 
   const login = async () => {
     try {
@@ -29,10 +31,12 @@ const Login = () => {
         "http://localhost:8000/api/auth/login",
         dataLogin
       );
-      setCookie("token", `${res.data.token_type} ${res.data.access_token}`, {
+      console.log(res.data.access_token);
+      setCookie("token", res.data.access_token, {
         expires: new Date(res.data.expires_in),
       });
       notify("success", "Đăng nhập thành công🙂");
+      getUser();
       router.push("/");
     } catch (error) {
       handleLoginError(error);

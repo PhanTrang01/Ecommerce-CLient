@@ -1,9 +1,8 @@
 import { MouseEventHandler, useContext, useState } from "react";
 import Image from "next/image";
-import RegisterBg from "../assets/img/login-bg.jpg";
+import RegisterBg from "../assets/img/register-bg.jpg";
 import styled from "styled-components";
 import axios from "axios";
-import { setCookie } from "cookies-next";
 import { ToastContext } from "../contexts/ToastContext";
 import { useRouter } from "next/router";
 import { handleRegisterError } from "../utils/handleError";
@@ -134,7 +133,7 @@ const RegisterForm = styled.form`
   display: grid;
   row-gap: 32px;
   padding: 48px;
-  width: 480px;
+  width: 540px;
   justify-self: center;
   background-color: hsla(244, 16%, 92%, 0.6);
   border: 2px solid hsla(244, 16%, 92%, 0.75);
@@ -183,7 +182,7 @@ const RegisterInput = styled.input`
     color: hsl(244, 4%, 36%);
   }
   :focus {
-    border: 2px solid hsl(244, 75%, 57%);
+    border: 2px solid #e43f70;
   }
 `;
 
@@ -195,11 +194,11 @@ const RegisterBtnContainer = styled.div`
 const RegisterButton = styled.button`
   width: 100%;
   padding: 14px 32px;
-  background-color: hsl(244, 75%, 57%);
+  background-color: #e43f70;
   color: #fff;
   font-size: 13px;
   font-weight: 600;
-  box-shadow: 0 6px 24px hsla(244, 75%, 48%, 0.5);
+  box-shadow: 0 6px 24px #f78084;
   margin-bottom: 16px;
   cursor: pointer;
   border-radius: 6px;

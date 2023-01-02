@@ -4,14 +4,17 @@ import type { AppProps } from "next/app";
 import { AnimatePresence } from "framer-motion";
 import ToastContextProvider from "../contexts/ToastContext";
 import { ToastContainer } from "react-toastify";
+import UserContextProvider from "../contexts/UserContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <AnimatePresence>
+    <UserContextProvider>
       <ToastContextProvider>
-        <Component {...pageProps} />
+        <AnimatePresence>
+          <Component {...pageProps} />
+        </AnimatePresence>
         <ToastContainer />
       </ToastContextProvider>
-    </AnimatePresence>
+    </UserContextProvider>
   );
 }
