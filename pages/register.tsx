@@ -13,7 +13,6 @@ type UserRegister = {
   name: string;
   email: string;
   password: string;
-  photoURL: string | null;
 };
 
 const Register = () => {
@@ -24,7 +23,6 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    photoURL: null,
   });
   const [isShowPass, setIsShowPass] = useState<boolean>(false);
   const [fileImg, setFileImg] = useState<File>();
