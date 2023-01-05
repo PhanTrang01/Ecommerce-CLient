@@ -8,6 +8,8 @@ import { ToastContext } from "../contexts/ToastContext";
 import { useRouter } from "next/router";
 import { handleLoginError } from "../utils/handleError";
 import { UserContext } from "../contexts/UserContext";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 type UserLogin = {
   email: string;
@@ -21,9 +23,14 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [isShowPass, setIsShowPass] = useState<boolean>(false);
 
   const { notify } = useContext(ToastContext);
   const { getUser } = useContext(UserContext);
+
+  const toggleShowPass = () => {
+    setIsShowPass(!isShowPass);
+  };
 
   const login = async () => {
     try {
@@ -75,18 +82,25 @@ const Login = () => {
                   }
                 />
               </div>
-              <div>
+              <PasswordInputContainer>
                 <LoginLabel htmlFor="password">Password</LoginLabel>
                 <LoginInput
                   id="password"
-                  type="password"
+                  type={isShowPass ? "text" : "password"}
                   placeholder="Enter your password"
                   value={dataLogin.password}
                   onChange={(e) =>
                     setDataLogin({ ...dataLogin, password: e.target.value })
                   }
                 />
-              </div>
+                <ShowPasswordButton>
+                  {isShowPass ? (
+                    <RemoveRedEyeIcon onClick={toggleShowPass} />
+                  ) : (
+                    <VisibilityOffIcon onClick={toggleShowPass} />
+                  )}
+                </ShowPasswordButton>
+              </PasswordInputContainer>
             </LoginInputContainer>
           </div>
           <div>
@@ -184,6 +198,17 @@ const LoginInput = styled.input`
   :focus {
     border: 2px solid hsl(244, 75%, 57%);
   }
+`;
+
+const PasswordInputContainer = styled.div`
+  position: relative;
+`;
+
+const ShowPasswordButton = styled.span`
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  cursor: pointer;
 `;
 
 const LoginBtnContainer = styled.div`

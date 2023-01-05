@@ -33,6 +33,9 @@ export const handleRegisterError = (error: any) => {
     if (res.data.password?.length > 0) {
       toast.error(res.data.password[0]);
     }
+    if (res.data.photoURL?.length > 0) {
+      toast.error(res.data.photoURL[0]);
+    }
   } else if (res.status === 500) {
     console.error("Internal server error");
     toast.error("Có lỗi xảy ra, vui lòng thử lại!");
