@@ -5,6 +5,9 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    domains: [process.env.AWS_S3_HOST_NAME],
+  },
 };
 
 module.exports = nextConfig;
