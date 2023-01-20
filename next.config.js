@@ -6,7 +6,7 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
-    domains: [process.env.AWS_S3_HOST_NAME],
+    domains: ["van-bucket.s3.ap-southeast-1.amazonaws.com"],
   },
 };
 
