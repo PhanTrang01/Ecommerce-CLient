@@ -10,3 +10,7 @@ button {
   outline: none;
   border: none;
 }
+
+a {
+  text-decoration: none;
+}
