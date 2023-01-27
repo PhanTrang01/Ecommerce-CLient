@@ -3,13 +3,14 @@ import StarRateIcon from "@mui/icons-material/StarRate";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import styled from "styled-components";
 import Link from "next/link";
+import Chip from "@mui/material/Chip";
 
 const ProductLayout = () => {
   const productsData = [
     {
       id: 1,
       name: "Product 1",
-      description: "Product description",
+      description: "Product Description.",
       quantity: 1,
       price: 100,
       productImage:
@@ -18,7 +19,8 @@ const ProductLayout = () => {
     {
       id: 2,
       name: "Product 2",
-      description: "Product description",
+      description:
+        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       quantity: 1,
       price: 100,
       productImage:
@@ -27,7 +29,8 @@ const ProductLayout = () => {
     {
       id: 3,
       name: "Product 3",
-      description: "Product description",
+      description:
+        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       quantity: 1,
       price: 100,
       productImage:
@@ -36,7 +39,8 @@ const ProductLayout = () => {
     {
       id: 4,
       name: "Product 4",
-      description: "Product description",
+      description:
+        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       quantity: 1,
       price: 100,
       productImage:
@@ -45,7 +49,8 @@ const ProductLayout = () => {
     {
       id: 5,
       name: "Product 5",
-      description: "Product description",
+      description:
+        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       quantity: 1,
       price: 100,
       productImage:
@@ -54,7 +59,8 @@ const ProductLayout = () => {
     {
       id: 6,
       name: "Product 6",
-      description: "Product description",
+      description:
+        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       quantity: 1,
       price: 100,
       productImage:
@@ -63,7 +69,8 @@ const ProductLayout = () => {
     {
       id: 7,
       name: "Product 7",
-      description: "Product description",
+      description:
+        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       quantity: 1,
       price: 100,
       productImage:
@@ -72,7 +79,8 @@ const ProductLayout = () => {
     {
       id: 8,
       name: "Product 8",
-      description: "Product description",
+      description:
+        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       quantity: 1,
       price: 100,
       productImage:
@@ -96,8 +104,8 @@ const ProductLayout = () => {
                 />
               </ProductImage>
               <ProductDescription>
-                <span>{product.description}</span>
                 <h5>{product.name}</h5>
+                <span>{product.description}</span>
                 <ProductStar>
                   <span>
                     <StarRateIcon />
@@ -112,11 +120,14 @@ const ProductLayout = () => {
                     <StarRateIcon />
                   </span>
                 </ProductStar>
-                <h4>${product.price}</h4>
+                <ProductInfo>
+                  <h4>${product.price}</h4>
+                  <Chip label={`${product.quantity} available`} size="small" />
+                </ProductInfo>
+                <CartButton>
+                  <AddShoppingCartIcon />
+                </CartButton>
               </ProductDescription>
-              <CartButton>
-                <AddShoppingCartIcon />
-              </CartButton>
             </ProductItem>
           </Link>
         ))}
@@ -127,6 +138,8 @@ const ProductLayout = () => {
 
 const ProductLayoutSection = styled.div`
   text-align: center;
+  padding: 0 40px;
+  margin-bottom: 40px;
   h2 {
     margin: 20px 0;
     font-size: 28px;
@@ -139,16 +152,19 @@ const ProductLayoutSection = styled.div`
 `;
 
 const ProductContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-rows: auto;
+  grid-gap: 32px 28px;
 `;
 
 const ProductItem = styled.div`
   position: relative;
-  width: 23%;
+  width: 25%;
+  height: 100%;
   min-width: 250px;
+  display: flex;
+  flex-direction: column;
   padding: 10px 12px;
   border: 1px solid #cce7d0;
   border-radius: 25px;
@@ -163,6 +179,7 @@ const ProductItem = styled.div`
 `;
 
 const ProductImage = styled.div`
+  flex-shrink: 0;
   img {
     object-fit: cover;
     border-radius: 20px;
@@ -170,6 +187,7 @@ const ProductImage = styled.div`
 `;
 
 const ProductDescription = styled.div`
+  flex: 1;
   text-align: start;
   padding: 10px 0;
   span {
@@ -181,17 +199,25 @@ const ProductDescription = styled.div`
     color: #1a1a1a;
     font-size: 14px;
   }
-  h4 {
-    padding-top: 7px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #088178;
-  }
 `;
 
 const ProductStar = styled.div`
   span {
     color: rgb(240, 225, 18);
+  }
+  margin-bottom: 16px;
+`;
+
+const ProductInfo = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 10px;
+  h4 {
+    padding-left: 7px;
+    padding-bottom: 4px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #088178;
   }
 `;
 
