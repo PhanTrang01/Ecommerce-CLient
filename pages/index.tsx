@@ -3,11 +3,9 @@ import Sidebar from "../components/Sidebar";
 
 export default function Home() {
   return (
-    <>
-      <Container>
-        <Sidebar />
-      </Container>
-    </>
+    <Container>
+      <Sidebar />
+    </Container>
   );
 }
 
