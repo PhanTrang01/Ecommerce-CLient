@@ -1,14 +1,18 @@
 import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
 
 export default function Home() {
   return (
-    <Container>
-      <Sidebar />
-    </Container>
+    <>
+      <Header />
+      <Container>
+        <Sidebar />
+      </Container>
+    </>
   );
 }
 
 const Container = styled.div`
-  padding: 20px;
+  padding: 0 20px;
 `;
