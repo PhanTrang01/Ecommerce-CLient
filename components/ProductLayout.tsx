@@ -4,89 +4,29 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import styled from "styled-components";
 import Link from "next/link";
 import Chip from "@mui/material/Chip";
+import { useEffect, useState } from "react";
+import { Product } from "../types";
+import axios from "axios";
 
 const ProductLayout = () => {
-  const productsData = [
-    {
-      id: 1,
-      name: "Product 1",
-      description: "Product Description.",
-      quantity: 1,
-      price: 100,
-      productImage:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/qqEwMDfT2BixRguU3MSLGzbxnHFkqB0UWOUNNEdg.jpg",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      description:
-        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      quantity: 1,
-      price: 100,
-      productImage:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/qqEwMDfT2BixRguU3MSLGzbxnHFkqB0UWOUNNEdg.jpg",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      description:
-        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      quantity: 1,
-      price: 100,
-      productImage:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/qqEwMDfT2BixRguU3MSLGzbxnHFkqB0UWOUNNEdg.jpg",
-    },
-    {
-      id: 4,
-      name: "Product 4",
-      description:
-        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      quantity: 1,
-      price: 100,
-      productImage:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/qqEwMDfT2BixRguU3MSLGzbxnHFkqB0UWOUNNEdg.jpg",
-    },
-    {
-      id: 5,
-      name: "Product 5",
-      description:
-        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      quantity: 1,
-      price: 100,
-      productImage:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/qqEwMDfT2BixRguU3MSLGzbxnHFkqB0UWOUNNEdg.jpg",
-    },
-    {
-      id: 6,
-      name: "Product 6",
-      description:
-        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      quantity: 1,
-      price: 100,
-      productImage:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/qqEwMDfT2BixRguU3MSLGzbxnHFkqB0UWOUNNEdg.jpg",
-    },
-    {
-      id: 7,
-      name: "Product 7",
-      description:
-        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      quantity: 1,
-      price: 100,
-      productImage:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/qqEwMDfT2BixRguU3MSLGzbxnHFkqB0UWOUNNEdg.jpg",
-    },
-    {
-      id: 8,
-      name: "Product 8",
-      description:
-        "Product Description. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      quantity: 1,
-      price: 100,
-      productImage:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/qqEwMDfT2BixRguU3MSLGzbxnHFkqB0UWOUNNEdg.jpg",
-    },
-  ];
+  const [productsData, setProductData] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const server_host = "http://localhost:8000/api";
+        const res = await axios.get(`${server_host}/products`);
+        const newProductsData = res.data;
+        if (newProductsData.data.length > 0) {
+          setProductData(newProductsData.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProductData();
+  }, []);
+
   return (
     <ProductLayoutSection>
       <h2>Featured Products</h2>
@@ -97,14 +37,14 @@ const ProductLayout = () => {
             <ProductItem>
               <ProductImage>
                 <Image
-                  src={product.productImage}
+                  src={product.photoURL}
                   alt="product image"
                   width={222}
                   height={300}
                 />
               </ProductImage>
               <ProductDescription>
-                <h5>{product.name}</h5>
+                <h5>{product.pname}</h5>
                 <span>{product.description}</span>
                 <ProductStar>
                   <span>
