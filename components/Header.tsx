@@ -19,7 +19,7 @@ import { ToastContext } from "../contexts/ToastContext";
 
 const pages = ["Products", "Pricing", "Blog"];
 
-export default function Header() {
+const Header = () => {
   const routes = useRouter();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -180,3 +180,5 @@ export default function Header() {
     </AppBar>
   );
 }
+
+export default Header;
