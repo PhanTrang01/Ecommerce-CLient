@@ -4,92 +4,61 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import styled from "styled-components";
 import Link from "next/link";
 import Chip from "@mui/material/Chip";
-import { useEffect, useState } from "react";
 import { Product } from "../types";
-import axios from "axios";
 
-const ProductLayout = () => {
-  const [productsData, setProductData] = useState<Product[]>([]);
+interface ProductLayoutProps {
+  productsData: Product[];
+}
 
-  useEffect(() => {
-    const fetchProductData = async () => {
-      try {
-        const server_host = "http://localhost:8000/api";
-        const res = await axios.get(`${server_host}/products`);
-        const newProductsData = res.data;
-        if (newProductsData.data.length > 0) {
-          setProductData(newProductsData.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchProductData();
-  }, []);
-
+const ProductLayout = ({ productsData }: ProductLayoutProps) => {
   return (
-    <ProductLayoutSection>
-      <h2>Featured Products</h2>
-      <p>New Morden Design</p>
-      <ProductContainer>
-        {productsData.map((product) => (
-          <Link key={product.id} href={`/product/${product.id}`}>
-            <ProductItem>
-              <ProductImage>
-                <Image
-                  src={product.photoURL}
-                  alt="product image"
-                  width={222}
-                  height={300}
-                />
-              </ProductImage>
-              <ProductDescription>
-                <h5>{product.pname}</h5>
-                <span>{product.description}</span>
-                <ProductStar>
-                  <span>
-                    <StarRateIcon />
-                  </span>
-                  <span>
-                    <StarRateIcon />
-                  </span>
-                  <span>
-                    <StarRateIcon />
-                  </span>
-                  <span>
-                    <StarRateIcon />
-                  </span>
-                </ProductStar>
-                <ProductInfo>
-                  <h4>${product.price}</h4>
-                  <Chip label={`${product.quantity} available`} size="small" />
-                </ProductInfo>
-                <CartButton>
-                  <AddShoppingCartIcon />
-                </CartButton>
-              </ProductDescription>
-            </ProductItem>
-          </Link>
-        ))}
-      </ProductContainer>
-    </ProductLayoutSection>
+    <ProductContainer>
+      {productsData.map((product) => (
+        <Link key={product.id} href={`/product/${product.id}`}>
+          <ProductItem>
+            <ProductImage>
+              <Image
+                src={product.photoURL}
+                alt="product image"
+                width={222}
+                height={300}
+              />
+            </ProductImage>
+            <ProductDescription>
+              <h5>{product.pname}</h5>
+              <span>
+                {product.description.length > 80
+                  ? `${product.description.slice(0, 80)}...`
+                  : product.description}
+              </span>
+              <ProductStar>
+                <span>
+                  <StarRateIcon />
+                </span>
+                <span>
+                  <StarRateIcon />
+                </span>
+                <span>
+                  <StarRateIcon />
+                </span>
+                <span>
+                  <StarRateIcon />
+                </span>
+              </ProductStar>
+              <ProductInfo>
+                <h4>${product.price}</h4>
+                <Chip label={`${product.quantity} available`} size="small" />
+              </ProductInfo>
+              <CartButton>
+                <AddShoppingCartIcon />
+              </CartButton>
+            </ProductDescription>
+          </ProductItem>
+        </Link>
+      ))}
+    </ProductContainer>
   );
 };
-
-const ProductLayoutSection = styled.div`
-  text-align: center;
-  padding: 0 40px;
-  margin-bottom: 40px;
-  h2 {
-    margin: 20px 0;
-    font-size: 28px;
-  }
-  p {
-    color: #606063;
-    font-size: 16px;
-    margin-bottom: 20px;
-  }
-`;
 
 const ProductContainer = styled.div`
   display: grid;
