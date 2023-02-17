@@ -7,6 +7,7 @@ import axios from "axios";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Button from "@mui/material/Button";
+import ProductSuggest from "../../components/ProductSuggest";
 
 const ProductDetail = () => {
   const route = useRouter();
@@ -20,10 +21,12 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const server_host = "http://localhost:8000/api";
-        const res = await axios.get(`${server_host}/products/${id}`);
-        const newProductData = res.data.data;
-        if (newProductData) setProductData(newProductData);
+        if (id) {
+          const server_host = "http://localhost:8000/api";
+          const res = await axios.get(`${server_host}/products/${id}`);
+          const newProductData = res.data.data;
+          if (newProductData) setProductData(newProductData);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -53,7 +56,7 @@ const ProductDetail = () => {
           </ProductImg>
           <ProductContent>
             <ProductTitle>{productData?.pname}</ProductTitle>
-            <ProductLink>visit nike store</ProductLink>
+            <ProductLink>visit my store</ProductLink>
             <ProductRating>
               <span>
                 <StarRateIcon />
@@ -112,6 +115,10 @@ const ProductDetail = () => {
         </Card>
       </CardWrapper>
       <hr />
+      <ProductSuggestContainer>
+        <h1>Similar products</h1>
+        <ProductSuggest productId={Number(id)} />
+      </ProductSuggestContainer>
     </ProductDetailContainer>
   );
 };
@@ -237,6 +244,14 @@ const PurchaseInfo = styled.div`
     margin-right: 1rem;
     margin-bottom: 1rem;
     width: 60px;
+  }
+`;
+
+const ProductSuggestContainer = styled.div`
+  padding: 1.5rem 2.5rem;
+  h1 {
+    font-size: 24px;
+    margin-bottom: 1rem;
   }
 `;
 
