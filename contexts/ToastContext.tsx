@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useMemo } from "react";
 import { toast } from "react-toastify";
 
 type TYPE = "success" | "warning" | "error" | "info" | undefined;
@@ -39,9 +39,11 @@ const ToastContextProvider = ({ children }: ToastContextProps) => {
       toast(message);
     }
   };
-  const toastContextData = {
-    notify,
-  };
+  const toastContextData = useMemo(() => {
+    return {
+      notify,
+    };
+  }, []);
 
   return (
     <ToastContext.Provider value={toastContextData}>

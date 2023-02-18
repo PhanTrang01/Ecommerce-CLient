@@ -16,6 +16,9 @@ import { UserContext } from "../contexts/UserContext";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { ToastContext } from "../contexts/ToastContext";
+import Badge from "@mui/material/Badge";
+import ChatIcon from "@mui/icons-material/Chat";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const pages = ["Products", "Pricing", "Blog"];
 
@@ -133,6 +136,26 @@ const Header = () => {
 
           {user ? (
             <Box sx={{ flexGrow: 0 }}>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+                sx={{ marginRight: 2 }}
+              >
+                <Badge badgeContent={4} color="error">
+                  <ChatIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+                sx={{ marginRight: 2 }}
+              >
+                <Badge badgeContent={17} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt={user.name} src={user.photoURL} />
@@ -179,6 +202,6 @@ const Header = () => {
       </Container>
     </AppBar>
   );
-}
+};
 
 export default Header;
