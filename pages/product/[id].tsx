@@ -8,6 +8,7 @@ import StarRateIcon from "@mui/icons-material/StarRate";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Button from "@mui/material/Button";
 import ProductSuggest from "../../components/ProductSuggest";
+import Footer from "../../components/Footer";
 
 const ProductDetail = () => {
   const route = useRouter();
@@ -35,91 +36,94 @@ const ProductDetail = () => {
   }, [id]);
 
   return (
-    <ProductDetailContainer>
-      <CardWrapper>
-        <CardIntro>
-          <h1>Product Detail</h1>
-          <h2>New Morden Design</h2>
-        </CardIntro>
-        <Card>
-          <ProductImg>
-            <Image
-              src={
-                productData?.photoURL
-                  ? productData.photoURL
-                  : "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/product.png"
-              }
-              alt="product image"
-              width="400"
-              height="400"
-            />
-          </ProductImg>
-          <ProductContent>
-            <ProductTitle>{productData?.pname}</ProductTitle>
-            <ProductLink>visit my store</ProductLink>
-            <ProductRating>
-              <span>
-                <StarRateIcon />
-              </span>
-              <span>
-                <StarRateIcon />
-              </span>
-              <span>
-                <StarRateIcon />
-              </span>
-              <span>
-                <StarRateIcon />
-              </span>
-              <span>
-                <StarRateIcon />
-              </span>
-            </ProductRating>
-
-            <ProductPrice>
-              <p className="last-price">
-                Price: <span>${productData?.price}</span>
-              </p>
-            </ProductPrice>
-
-            <ProductDetailText>
-              <h2>about this item: </h2>
-              <p>{productData?.description}</p>
-              <ul>
-                <li>
-                  Available: <span>{productData?.quantity}</span>
-                </li>
-                <li>
-                  Category: <span>{productData?.category.name}</span>
-                </li>
-                <li>
-                  Shipping Area: <span>All over the world</span>
-                </li>
-                <li>
-                  Shipping Fee: <span>Free</span>
-                </li>
-              </ul>
-            </ProductDetailText>
-
-            <PurchaseInfo>
-              <input
-                type="number"
-                min="0"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
+    <>
+      <ProductDetailContainer>
+        <CardWrapper>
+          <CardIntro>
+            <h1>Product Detail</h1>
+            <h2>New Morden Design</h2>
+          </CardIntro>
+          <Card>
+            <ProductImg>
+              <Image
+                src={
+                  productData?.photoURL
+                    ? productData.photoURL
+                    : "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/product.png"
+                }
+                alt="product image"
+                width="400"
+                height="400"
               />
-              <Button color="primary" variant="contained">
-                Add to Cart <AddShoppingCartIcon />
-              </Button>
-            </PurchaseInfo>
-          </ProductContent>
-        </Card>
-      </CardWrapper>
-      <hr />
-      <ProductSuggestContainer>
-        <h1>Similar products</h1>
-        <ProductSuggest productId={Number(id)} />
-      </ProductSuggestContainer>
-    </ProductDetailContainer>
+            </ProductImg>
+            <ProductContent>
+              <ProductTitle>{productData?.pname}</ProductTitle>
+              <ProductLink>visit my store</ProductLink>
+              <ProductRating>
+                <span>
+                  <StarRateIcon />
+                </span>
+                <span>
+                  <StarRateIcon />
+                </span>
+                <span>
+                  <StarRateIcon />
+                </span>
+                <span>
+                  <StarRateIcon />
+                </span>
+                <span>
+                  <StarRateIcon />
+                </span>
+              </ProductRating>
+
+              <ProductPrice>
+                <p className="last-price">
+                  Price: <span>${productData?.price}</span>
+                </p>
+              </ProductPrice>
+
+              <ProductDetailText>
+                <h2>about this item: </h2>
+                <p>{productData?.description}</p>
+                <ul>
+                  <li>
+                    Available: <span>{productData?.quantity}</span>
+                  </li>
+                  <li>
+                    Category: <span>{productData?.category.name}</span>
+                  </li>
+                  <li>
+                    Shipping Area: <span>All over the world</span>
+                  </li>
+                  <li>
+                    Shipping Fee: <span>Free</span>
+                  </li>
+                </ul>
+              </ProductDetailText>
+
+              <PurchaseInfo>
+                <input
+                  type="number"
+                  min="0"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                />
+                <Button color="primary" variant="contained">
+                  Add to Cart <AddShoppingCartIcon />
+                </Button>
+              </PurchaseInfo>
+            </ProductContent>
+          </Card>
+        </CardWrapper>
+        <hr />
+        <ProductSuggestContainer>
+          <h1>Similar products</h1>
+          <ProductSuggest productId={Number(id)} />
+        </ProductSuggestContainer>
+      </ProductDetailContainer>
+      <Footer />
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
 import { User } from "../types";
 import axios from "axios";
 
@@ -34,7 +34,6 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
         const userData = res.data;
         setUser(userData);
       } catch (error) {
-        // console.error(error);
         setUser(undefined);
       }
     };
@@ -42,12 +41,14 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
     fetchData();
   }, [loadUser]);
 
-  const userData = {
-    user,
-    getUser: () => {
-      setLoadUser((pre) => !pre);
-    },
-  };
+  const userData = useMemo(() => {
+    return {
+      user,
+      getUser: () => {
+        setLoadUser((pre) => !pre);
+      },
+    };
+  }, [user]);
 
   return (
     <UserContext.Provider value={userData}>{children}</UserContext.Provider>

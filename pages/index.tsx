@@ -3,19 +3,23 @@ import Sidebar from "../components/Sidebar";
 import ProductLayout from "../components/ProductLayout";
 import { InferGetStaticPropsType } from "next";
 import axios from "axios";
+import Footer from "../components/Footer";
 
 export default function Home({
   productsData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Container>
-      <Sidebar />
-      <ProductLayoutSection>
-        <h2>Featured Products</h2>
-        <p>New Morden Design</p>
-        <ProductLayout productsData={productsData} />
-      </ProductLayoutSection>
-    </Container>
+    <>
+      <Container>
+        <Sidebar />
+        <ProductLayoutSection>
+          <h2>Featured Products</h2>
+          <p>New Morden Design</p>
+          <ProductLayout productsData={productsData} />
+        </ProductLayoutSection>
+      </Container>
+      <Footer />
+    </>
   );
 }
 
