@@ -131,7 +131,7 @@ const FooterCol = styled.div`
   &:last-child {
     gap: 15px;
   }
-  @media (max-width: 1024px) {
+  @media (max-width: 1286px) {
     &:first-child {
       display: none;
     }
