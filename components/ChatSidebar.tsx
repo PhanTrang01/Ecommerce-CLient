@@ -15,15 +15,17 @@ import DialogContent from "@mui/material/DialogContent";
 import TextField from "@mui/material/TextField";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
-import { useContext, useLayoutEffect, useState } from "react";
+import { useContext, useState } from "react";
 import * as EmailValidator from "email-validator";
 import { addDoc, collection, query, where } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { Conversation } from "../types";
 import ConversationSelect from "./ConversationSelect";
 import { UserContext } from "../contexts/UserContext";
+import { useRouter } from "next/router";
 
 const ChatSidebar = () => {
+  const routes = useRouter();
   const { user } = useContext(UserContext);
 
   const [isOpenDialog, setIsOpenDialog] = useState(false);
@@ -68,14 +70,6 @@ const ChatSidebar = () => {
     closeDialog();
   };
 
-  const logout = async () => {
-    try {
-      // await signOut(auth);
-    } catch (error) {
-      console.error("Error logging out", error);
-    }
-  };
-
   return (
     <StyleContainer>
       <StyleHeader>
@@ -89,7 +83,7 @@ const ChatSidebar = () => {
           <IconButton>
             <MoreVerticalIcon />
           </IconButton>
-          <IconButton onClick={logout}>
+          <IconButton onClick={() => routes.push("/")}>
             <LogoutIcon />
           </IconButton>
         </div>
