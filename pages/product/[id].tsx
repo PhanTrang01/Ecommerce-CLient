@@ -26,7 +26,7 @@ const ProductDetail = () => {
   const [productData, setProductData] = useState<Product | undefined>(
     undefined
   );
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const { user } = useContext(UserContext);
   const { notify } = useContext(ToastContext);
   const { getCarts } = useContext(CartContext);
@@ -165,6 +165,16 @@ const ProductDetail = () => {
                   <li>
                     Shipping Fee: <span>Free</span>
                   </li>
+                  <li>
+                    Seld by:{" "}
+                    <span
+                      onClick={() =>
+                        route.push(`/user/${productData?.owner.id}`)
+                      }
+                    >
+                      {productData?.owner.name}
+                    </span>
+                  </li>
                 </ul>
               </ProductDetailText>
 
@@ -190,7 +200,7 @@ const ProductDetail = () => {
                 <PurchaseInfo>
                   <input
                     type="number"
-                    min="0"
+                    min="1"
                     value={quantity}
                     onChange={(e) => setQuantity(Number(e.target.value))}
                   />
@@ -344,6 +354,12 @@ const ProductDetailText = styled.div`
       opacity: 0.9;
       span {
         font-weight: 400;
+      }
+      &:last-child {
+        span {
+          color: #1976d2;
+          cursor: pointer;
+        }
       }
     }
   }

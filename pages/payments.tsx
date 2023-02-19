@@ -171,8 +171,10 @@ const Payments = () => {
           </div>
 
           <ButtonArea>
+            <label>Ship to:</label>
             <AddressInput
               type="text"
+              placeholder="Input your address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
@@ -316,7 +318,12 @@ const ButtonArea = styled.div`
 `;
 
 const AddressInput = styled.input`
+  margin-right: 18px;
+  margin-left: 4px;
   border: 1px solid #333;
+  height: 36px;
+  border-radius: 6px;
+  padding: 0 16px;
 `;
 
 export default Payments;

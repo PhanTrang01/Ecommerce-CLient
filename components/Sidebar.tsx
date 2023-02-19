@@ -3,19 +3,83 @@ import styled from "styled-components";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Slider from "./Slider";
-import { Dispatch, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  MouseEventHandler,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import axios from "axios";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { ToastContext } from "../contexts/ToastContext";
+import { Product } from "../types";
 
 interface SideBarProps {
+  productsData: Product[];
   setProductsCallback: Dispatch<any>;
 }
 
-const Sidebar = ({ setProductsCallback }: SideBarProps) => {
+const Sidebar = ({ productsData, setProductsCallback }: SideBarProps) => {
   const server_host = "http://localhost:8000/api";
+
+  const { notify } = useContext(ToastContext);
 
   const [productName, setProductName] = useState<string>("");
   const [cateId, setCateId] = useState<string>("0");
+
+  const [fileImg, setFileImg] = useState<File>();
+  const [img, setImg] = useState<string>("");
+
+  const searchImageSubmit: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    const image_host = "http://localhost:5000";
+    e.preventDefault();
+    const formData = new FormData();
+    if (fileImg) formData.append("file", fileImg);
+    try {
+      const res = await axios.post(`${image_host}`, formData);
+      if (res.data) {
+        console.log(res.data);
+        const productIdObj = res.data;
+        const dataSearch = Object.values(productIdObj).map((id) => {
+          const data = productsData.find((product) => product.id === id);
+          if (data) {
+            return data;
+          } else {
+            return;
+          }
+        });
+        setProductsCallback(dataSearch);
+        setImg("");
+      } else {
+        notify("warning", "Problem uploading photos");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChooseImg = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const file = files[0];
+      if (!file) return;
+      if (file.type.indexOf("image/") === -1) {
+        notify("warning", "Định dạng file không hợp lệ");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
+        setImg(result as string);
+      };
+      reader.readAsDataURL(files[0]);
+
+      setFileImg(file);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,6 +164,7 @@ const Sidebar = ({ setProductsCallback }: SideBarProps) => {
       const res = await axios.get(`${server_host}/search/${productName}`);
       const productData = res.data;
       setProductsCallback(productData);
+      setProductName("");
     } catch (error) {
       console.error(error);
     }
@@ -153,13 +218,20 @@ const Sidebar = ({ setProductsCallback }: SideBarProps) => {
               onChange={(e) => setProductName(e.target.value)}
             />
             <CameraIcon>
-              <label htmlFor="image">
-                <CameraAltIcon />
-              </label>
-              <input type="file" id="image" hidden />
+              <SearchLabelImage htmlFor="image">
+                {img ? (
+                  <Image src={img} alt="file" width={200} height={400} />
+                ) : (
+                  <CameraAltIcon />
+                )}
+              </SearchLabelImage>
+              <input type="file" id="image" hidden onChange={handleChooseImg} />
             </CameraIcon>
-
-            <SearchBtn onClick={handleSearch}>Search</SearchBtn>
+            {img ? (
+              <SearchBtn onClick={searchImageSubmit}>Search</SearchBtn>
+            ) : (
+              <SearchBtn onClick={handleSearch}>Search</SearchBtn>
+            )}
           </SearchBox>
         </RightContainer>
       </SubHeader>
@@ -280,12 +352,42 @@ const SearchBtn = styled.button`
   }
 `;
 
-const CameraIcon = styled.div`
+const CameraIcon = styled.form`
   position: absolute;
-  top: 12px;
+  top: 6px;
   right: 120px;
   label {
     cursor: pointer;
+  }
+`;
+
+const SearchLabelImage = styled.label`
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 5px;
+  border: 2px dashed hsl(244, 4%, 36%);
+  cursor: pointer;
+  i,
+  p {
+    color: hsl(244, 4%, 36%);
+  }
+  i {
+    font-size: 40px;
+  }
+  p {
+    font-size: 24px;
+  }
+  img {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 

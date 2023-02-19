@@ -16,7 +16,10 @@ export default function Home({
     <>
       <Header />
       <Container>
-        <Sidebar setProductsCallback={setProducts} />
+        <Sidebar
+          productsData={productsData}
+          setProductsCallback={setProducts}
+        />
         <ProductLayoutSection>
           <h2>Featured Products</h2>
           <p>New Morden Design</p>

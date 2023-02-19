@@ -7,8 +7,10 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { User } from "../../types";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
-const User = () => {
+const UserProfile = () => {
   const route = useRouter();
   const id = route.query.id;
 
@@ -30,52 +32,57 @@ const User = () => {
     fetchData();
   }, [id]);
   return (
-    <ProfileContainer>
-      <Profile>
-        <ProfileBg></ProfileBg>
-        <Container>
-          <ProfileImage
-            style={{ backgroundImage: `url(${userData?.photoURL})` }}
-          ></ProfileImage>
-          <ProfileInfo>
-            <UserName>{userData?.name ?? "No Name"}</UserName>
-            <h2>ABOUT</h2>
-            <p>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ad
-              voluptatibus officiis magnam neque est, ex exercitationem minima
-              omnis quidem vitae sapiente molestias alias numquam corporis,
-              expedita dolores sed in esse?
-            </p>
+    <>
+      <Header />
+      <ProfileContainer>
+        <Profile>
+          <ProfileBg></ProfileBg>
+          <Container>
+            <ProfileImage
+              style={{ backgroundImage: `url(${userData?.photoURL})` }}
+            ></ProfileImage>
+            <ProfileInfo>
+              <UserName>{userData?.name ?? "No Name"}</UserName>
+              <UserEmail>{userData?.email ?? "No Contact"}</UserEmail>
+              <h2>ABOUT</h2>
+              <p>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ad
+                voluptatibus officiis magnam neque est, ex exercitationem minima
+                omnis quidem vitae sapiente molestias alias numquam corporis,
+                expedita dolores sed in esse?
+              </p>
 
-            <SocialMediaIcons>
-              <a href="" target="_blank">
-                <FacebookIcon />
-              </a>
-              <a href="" target="_blank">
-                <InstagramIcon />
-              </a>
-              <a href="" target="_blank">
-                <GitHubIcon />
-              </a>
-              <a href="" target="_blank">
-                <TwitterIcon />
-              </a>
-            </SocialMediaIcons>
-          </ProfileInfo>
-        </Container>
-        <Statistics>
-          <p>
-            <strong>29</strong> Followers
-          </p>
-          <p>
-            <strong>184</strong> Following
-          </p>
-          <p>
-            <strong>6</strong> Products
-          </p>
-        </Statistics>
-      </Profile>
-    </ProfileContainer>
+              <SocialMediaIcons>
+                <a href="" target="_blank">
+                  <FacebookIcon />
+                </a>
+                <a href="" target="_blank">
+                  <InstagramIcon />
+                </a>
+                <a href="" target="_blank">
+                  <GitHubIcon />
+                </a>
+                <a href="" target="_blank">
+                  <TwitterIcon />
+                </a>
+              </SocialMediaIcons>
+            </ProfileInfo>
+          </Container>
+          <Statistics>
+            <p>
+              <strong>29</strong> Followers
+            </p>
+            <p>
+              <strong>184</strong> Following
+            </p>
+            <p>
+              <strong>6</strong> Products
+            </p>
+          </Statistics>
+        </Profile>
+      </ProfileContainer>
+      <Footer />
+    </>
   );
 };
 
@@ -164,6 +171,9 @@ const ProfileInfo = styled.div`
     margin-bottom: 5%;
     color: #f63d47;
   }
+  h3 {
+    position: absolute;
+  }
   p {
     line-height: 1.5rem;
   }
@@ -173,6 +183,13 @@ const UserName = styled.h1`
   animation: titleEffect 1s cubic-bezier(0, 0.2, 0.4, 1);
   top: -80px;
   left: 60px;
+`;
+
+const UserEmail = styled.h3`
+  animation: titleEffect 1s cubic-bezier(0, 0.2, 0.4, 1);
+  top: 0px;
+  left: 80px;
+  color: #888;
 `;
 
 const SocialMediaIcons = styled.div`
@@ -210,4 +227,4 @@ const Statistics = styled.div`
   }
 `;
 
-export default User;
+export default UserProfile;
