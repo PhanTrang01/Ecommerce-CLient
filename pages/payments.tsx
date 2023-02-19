@@ -7,19 +7,28 @@ import { CartContext } from "../contexts/CartContext";
 import Image from "next/image";
 import { Cart } from "../types";
 import Alert from "@mui/material/Alert";
+import axios from "axios";
+import { UserContext } from "../contexts/UserContext";
+import { ToastContext } from "../contexts/ToastContext";
 
 const Payments = () => {
-  const { carts } = useContext(CartContext);
+  const server_host = "http://localhost:8000/api";
+  const { user } = useContext(UserContext);
+  const { notify } = useContext(ToastContext);
+  const { carts, getCarts } = useContext(CartContext);
   const [cartsData, setCartsData] = useState<Cart[]>([]);
+  const [address, setAddress] = useState<string>("");
 
   useEffect(() => {
     setCartsData(carts);
-  }, [carts]);
+    setAddress(user?.address ?? "");
+  }, [carts, user?.address]);
 
   const handleChangeQuantity = (
     e: ChangeEvent<HTMLInputElement>,
     cartId: number
   ) => {
+    // update ui
     const newCartsData = cartsData.map((cart) => {
       if (cart.id === cartId)
         return {
@@ -29,10 +38,67 @@ const Payments = () => {
       else return cart;
     });
     setCartsData(newCartsData);
+    // update db
+    const updateCart = async () => {
+      try {
+        const res = await axios.put(
+          `${server_host}/payments/${cartId}`,
+          {
+            quantity: Number(e.target.value),
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        if (res.data.success) {
+          getCarts();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    updateCart();
   };
 
   const handleRemoveProduct = (cartId: number) => {
+    // update UI
     setCartsData(cartsData.filter((cart) => cart.id !== cartId));
+    // update DB
+    const deleteCart = async () => {
+      try {
+        const res = await axios.delete(`${server_host}/payments/${cartId}`, {
+          withCredentials: true,
+        });
+        if (res.data.success) {
+          getCarts();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    deleteCart();
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const res = await axios.post(
+        `${server_host}/purchase`,
+        {
+          address,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        notify("success", "Successfully purchased!");
+        getCarts();
+      } else {
+        notify("error", res.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const grandTotal = useMemo(() => {
@@ -105,10 +171,16 @@ const Payments = () => {
           </div>
 
           <ButtonArea>
-            <Button color="primary" variant="contained" sx={{ marginRight: 2 }}>
-              Update
-            </Button>
-            <Button color="success" variant="contained">
+            <AddressInput
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+            <Button
+              color="success"
+              variant="contained"
+              onClick={handleCheckout}
+            >
               Checkout
             </Button>
           </ButtonArea>
@@ -241,6 +313,10 @@ const TotalsValue = styled.div`
 const ButtonArea = styled.div`
   float: right;
   margin-top: 20px;
+`;
+
+const AddressInput = styled.input`
+  border: 1px solid #333;
 `;
 
 export default Payments;

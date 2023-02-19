@@ -10,6 +10,7 @@ import { handleLoginError } from "../utils/handleError";
 import { UserContext } from "../contexts/UserContext";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { CartContext } from "../contexts/CartContext";
 
 type UserLogin = {
   email: string;
@@ -27,6 +28,7 @@ const Login = () => {
 
   const { notify } = useContext(ToastContext);
   const { getUser } = useContext(UserContext);
+  const { getCarts } = useContext(CartContext);
 
   const toggleShowPass = () => {
     setIsShowPass(!isShowPass);
@@ -43,6 +45,7 @@ const Login = () => {
       });
       notify("success", "Đăng nhập thành công🙂");
       getUser();
+      getCarts();
       router.push("/");
     } catch (error) {
       handleLoginError(error);

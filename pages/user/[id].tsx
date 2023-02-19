@@ -12,7 +12,7 @@ const User = () => {
   const route = useRouter();
   const id = route.query.id;
 
-  const [userData, setUserData] = useState<User>();
+  const [userData, setUserData] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {

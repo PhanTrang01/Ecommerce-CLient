@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Product } from "../../types";
 import axios from "axios";
@@ -10,6 +10,14 @@ import Button from "@mui/material/Button";
 import ProductSuggest from "../../components/ProductSuggest";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import { UserContext } from "../../contexts/UserContext";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import { ToastContext } from "../../contexts/ToastContext";
+import { CartContext } from "../../contexts/CartContext";
 
 const ProductDetail = () => {
   const route = useRouter();
@@ -19,6 +27,19 @@ const ProductDetail = () => {
     undefined
   );
   const [quantity, setQuantity] = useState(0);
+  const { user } = useContext(UserContext);
+  const { notify } = useContext(ToastContext);
+  const { getCarts } = useContext(CartContext);
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +56,49 @@ const ProductDetail = () => {
     };
     fetchData();
   }, [id]);
+
+  const handleAddCart = async () => {
+    try {
+      const server_host = "http://localhost:8000/api";
+      const res = await axios.post(
+        `${server_host}/payments`,
+        {
+          productID: id,
+          quantity,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.error) {
+        notify("error", res.data.message);
+      } else {
+        notify("success", "Product have added to cart!");
+        getCarts();
+      }
+      handleClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteProduct = async () => {
+    try {
+      const server_host = "http://localhost:8000/api";
+      const res = await axios.delete(`${server_host}/products/${id}`, {
+        withCredentials: true,
+      });
+      if (res.data.error) {
+        notify("error", res.data.message);
+      } else {
+        notify("success", "Successfully deleted product!");
+        route.push("/");
+      }
+      handleClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -54,7 +118,7 @@ const ProductDetail = () => {
                     : "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/product.png"
                 }
                 alt="product image"
-                width="400"
+                width="450"
                 height="400"
               />
             </ProductImg>
@@ -104,17 +168,41 @@ const ProductDetail = () => {
                 </ul>
               </ProductDetailText>
 
-              <PurchaseInfo>
-                <input
-                  type="number"
-                  min="0"
-                  value={quantity}
-                  onChange={(e) => setQuantity(Number(e.target.value))}
-                />
-                <Button color="primary" variant="contained">
-                  Add to Cart <AddShoppingCartIcon />
-                </Button>
-              </PurchaseInfo>
+              {user?.id === productData?.owner.id ? (
+                <PurchaseInfo>
+                  <Button
+                    color="success"
+                    variant="contained"
+                    sx={{ mr: 2 }}
+                    onClick={() => route.push(`/product/edit/${id}`)}
+                  >
+                    Edit <EditIcon />
+                  </Button>
+                  <Button
+                    color="error"
+                    variant="contained"
+                    onClick={handleClickOpen}
+                  >
+                    Delete <DeleteIcon />
+                  </Button>
+                </PurchaseInfo>
+              ) : (
+                <PurchaseInfo>
+                  <input
+                    type="number"
+                    min="0"
+                    value={quantity}
+                    onChange={(e) => setQuantity(Number(e.target.value))}
+                  />
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={handleAddCart}
+                  >
+                    Add to Cart <AddShoppingCartIcon />
+                  </Button>
+                </PurchaseInfo>
+              )}
             </ProductContent>
           </Card>
         </CardWrapper>
@@ -123,6 +211,27 @@ const ProductDetail = () => {
           <h1>Similar products</h1>
           <ProductSuggest productId={Number(id)} />
         </ProductSuggestContainer>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Are you sure want to delete this product?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleClose}>Disagree</Button>
+            <Button
+              onClick={deleteProduct}
+              autoFocus
+              variant="contained"
+              color="info"
+            >
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
       </ProductDetailContainer>
       <Footer />
     </>
@@ -148,12 +257,13 @@ const CardIntro = styled.div`
 
 const Card = styled.div`
   display: flex;
+  margin-left: 80px;
 `;
 
 const ProductImg = styled.div`
   padding: 2.8rem 0;
   img {
-    object-fit: cover;
+    object-fit: scale-down;
   }
 `;
 

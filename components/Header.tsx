@@ -36,7 +36,7 @@ const Header = () => {
 
   const { user, getUser } = useContext(UserContext);
   const { notify } = useContext(ToastContext);
-  const { carts } = useContext(CartContext);
+  const { carts, getCarts } = useContext(CartContext);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -70,6 +70,7 @@ const Header = () => {
       if (data.success) {
         notify("success", data.message);
         getUser();
+        getCarts();
         handleCloseUserMenu();
       }
     } catch (error) {

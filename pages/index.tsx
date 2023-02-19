@@ -2,23 +2,25 @@ import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
 
 import ProductLayout from "../components/ProductLayout";
-import { InferGetStaticPropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import axios from "axios";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { useState } from "react";
 
 export default function Home({
   productsData,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [products, setProducts] = useState(productsData);
   return (
     <>
       <Header />
       <Container>
-        <Sidebar />
+        <Sidebar setProductsCallback={setProducts} />
         <ProductLayoutSection>
           <h2>Featured Products</h2>
           <p>New Morden Design</p>
-          <ProductLayout productsData={productsData} />
+          <ProductLayout productsData={products} />
         </ProductLayoutSection>
       </Container>
       <Footer />
@@ -26,9 +28,9 @@ export default function Home({
   );
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
+  const server_host = "http://localhost:8000/api";
   try {
-    const server_host = "http://localhost:8000/api";
     const res = await axios.get(`${server_host}/products`);
     const newProductsData = res.data;
     return {
@@ -37,7 +39,11 @@ export const getStaticProps = async () => {
       },
     };
   } catch (error) {
-    console.error(error);
+    return {
+      props: {
+        productsData: [],
+      },
+    };
   }
 };
 

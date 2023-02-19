@@ -2,6 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import { Product } from "../types";
 import axios from "axios";
 import ProductLayout from "./ProductLayout";
+import Alert from "@mui/material/Alert";
 
 interface ProductSuggestProps {
   productId: number;
@@ -27,7 +28,11 @@ const ProductSuggest = ({ productId }: ProductSuggestProps) => {
     };
     fetchData();
   }, [productId]);
-  return <ProductLayout productsData={productData} />;
+  return productData.length ? (
+    <ProductLayout productsData={productData} />
+  ) : (
+    <Alert severity="info">There are no similar products!</Alert>
+  );
 };
 
 export default ProductSuggest;

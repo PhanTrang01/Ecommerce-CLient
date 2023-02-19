@@ -3,60 +3,90 @@ import styled from "styled-components";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Slider from "./Slider";
+import { Dispatch, useState } from "react";
+import axios from "axios";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
-const Sidebar = () => {
+interface SideBarProps {
+  setProductsCallback: Dispatch<any>;
+}
+
+const Sidebar = ({ setProductsCallback }: SideBarProps) => {
+  const [productName, setProductName] = useState<string>("");
   const categories = [
     {
-      id: 1,
-      name: "Beauty",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "1",
+      name: "Xe Cộ",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
     {
-      id: 2,
-      name: "ELectronic",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "2",
+      name: "Đồ Điện Tử",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
     {
-      id: 3,
-      name: "Women's Fashion",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "3",
+      name: "Đồ Ăn, Thực Phẩm",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
     {
-      id: 4,
-      name: "Men's Fashion",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "4",
+      name: "Thể Thao & Du Lịch",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
     {
-      id: 5,
-      name: "Health",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "5",
+      name: "Sức Khỏe",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
     {
-      id: 6,
-      name: "Home & Life",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "6",
+      name: "Nhà Sách Online",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
     {
-      id: 7,
-      name: "Pet Supplies",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "7",
+      name: "Thời Trang Nữ",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
     {
-      id: 8,
-      name: "Sports & Travel",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "8",
+      name: "Thiết Bị Điện Gia Dụng",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
     {
-      id: 9,
-      name: "Cars, Motorbikes, Bicycles",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "9",
+      name: "Thời Trang Nam",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
     {
-      id: 10,
-      name: "Best Seller",
-      iconURL: "https://cdn-icons-png.flaticon.com/512/2960/2960162.png",
+      id: "10",
+      name: "Nhà Cửa & Đời Sống",
+      iconURL:
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
     },
   ];
+
+  const handleSearch = async () => {
+    const server_host = "http://localhost:8000/api";
+    try {
+      const res = await axios.get(`${server_host}/search/${productName}`);
+      const productData = res.data;
+      setProductsCallback(productData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <SubHeader>
@@ -99,8 +129,19 @@ const Sidebar = () => {
             <span>
               <SearchIcon />
             </span>
-            <SearchInput placeholder="Search for products"></SearchInput>
-            <SearchBtn>Search</SearchBtn>
+            <SearchInput
+              placeholder="Search for products"
+              value={productName}
+              onChange={(e) => setProductName(e.target.value)}
+            />
+            <CameraIcon>
+              <label htmlFor="image">
+                <CameraAltIcon />
+              </label>
+              <input type="file" id="image" hidden />
+            </CameraIcon>
+
+            <SearchBtn onClick={handleSearch}>Search</SearchBtn>
           </SearchBox>
         </RightContainer>
       </SubHeader>
@@ -218,6 +259,15 @@ const SearchBtn = styled.button`
   cursor: pointer;
   :hover {
     background-color: #0a011b;
+  }
+`;
+
+const CameraIcon = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 120px;
+  label {
+    cursor: pointer;
   }
 `;
 

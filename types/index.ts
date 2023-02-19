@@ -4,6 +4,7 @@ export type User = {
   id: number;
   name: string;
   email: string;
+  address: string;
   photoURL: string;
 };
 
@@ -72,5 +73,4 @@ export type Cart = {
   status: ECartStatus;
   select: ESelect;
   product: CartProduct;
-  createdAt: Date;
 };
