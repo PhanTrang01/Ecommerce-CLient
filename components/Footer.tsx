@@ -89,7 +89,7 @@ const Footer = () => {
 
 const FooterWrapper = styled.div`
   background-color: rgb(58, 58, 58);
-  margin-top: 40px;
+  margin-top: 80px;
 `;
 
 const FooterContainer = styled.div`

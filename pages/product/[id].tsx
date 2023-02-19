@@ -9,6 +9,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Button from "@mui/material/Button";
 import ProductSuggest from "../../components/ProductSuggest";
 import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 
 const ProductDetail = () => {
   const route = useRouter();
@@ -37,6 +38,7 @@ const ProductDetail = () => {
 
   return (
     <>
+      <Header />
       <ProductDetailContainer>
         <CardWrapper>
           <CardIntro>

@@ -1,15 +1,18 @@
 import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
+
 import ProductLayout from "../components/ProductLayout";
 import { InferGetStaticPropsType } from "next";
 import axios from "axios";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 export default function Home({
   productsData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
+      <Header />
       <Container>
         <Sidebar />
         <ProductLayoutSection>
@@ -39,7 +42,7 @@ export const getStaticProps = async () => {
 };
 
 const Container = styled.div`
-  padding: 20px;
+  padding: 0 20px;
 `;
 
 const ProductLayoutSection = styled.div`
