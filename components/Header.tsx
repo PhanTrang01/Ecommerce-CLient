@@ -231,7 +231,14 @@ const Header = () => {
                             variant="h5"
                             minWidth={180}
                           >
-                            {cart.product.pname}
+                            {`${cart.product.pname} x ${cart.quantity}`}
+                          </Typography>
+                          <Typography
+                            component="div"
+                            variant="subtitle1"
+                            minWidth={180}
+                          >
+                            {`${cart.product.price}$`}
                           </Typography>
                           <Chip
                             label={`quantity:${cart.quantity}`}
