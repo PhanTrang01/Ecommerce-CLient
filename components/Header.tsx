@@ -201,6 +201,9 @@ const Header = () => {
                 <MenuItem onClick={() => routes.push(`/user/${user.id}`)}>
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
+                <MenuItem onClick={() => routes.push(`/product/new`)}>
+                  <Typography textAlign="center">Create Product</Typography>
+                </MenuItem>
                 <MenuItem onClick={logout}>
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
