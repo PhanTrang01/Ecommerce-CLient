@@ -5,14 +5,17 @@ import { AnimatePresence } from "framer-motion";
 import ToastContextProvider from "../contexts/ToastContext";
 import { ToastContainer } from "react-toastify";
 import UserContextProvider from "../contexts/UserContext";
+import CartContextProvider from "../contexts/CartContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <UserContextProvider>
       <ToastContextProvider>
-        <AnimatePresence>
-          <Component {...pageProps} />
-        </AnimatePresence>
+        <CartContextProvider>
+          <AnimatePresence>
+            <Component {...pageProps} />
+          </AnimatePresence>
+        </CartContextProvider>
         <ToastContainer />
       </ToastContextProvider>
     </UserContextProvider>

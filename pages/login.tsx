@@ -38,7 +38,6 @@ const Login = () => {
         "http://localhost:8000/api/auth/login",
         dataLogin
       );
-      console.log(res.data.access_token);
       setCookie("token", res.data.access_token, {
         expires: new Date(res.data.expires_in),
       });
