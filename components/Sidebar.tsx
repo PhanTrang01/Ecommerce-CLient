@@ -3,7 +3,7 @@ import styled from "styled-components";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Slider from "./Slider";
-import { Dispatch, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import axios from "axios";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
@@ -12,7 +12,26 @@ interface SideBarProps {
 }
 
 const Sidebar = ({ setProductsCallback }: SideBarProps) => {
+  const server_host = "http://localhost:8000/api";
+
   const [productName, setProductName] = useState<string>("");
+  const [cateId, setCateId] = useState<string>("0");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          `${server_host}/categoies-search/${cateId}`
+        );
+        const productData = res.data.data;
+        setProductsCallback(productData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (cateId !== "0") fetchData();
+  }, [cateId, setProductsCallback]);
+
   const categories = [
     {
       id: "1",
@@ -24,60 +43,59 @@ const Sidebar = ({ setProductsCallback }: SideBarProps) => {
       id: "2",
       name: "Đồ Điện Tử",
       iconURL:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/circuit.png",
     },
     {
       id: "3",
       name: "Đồ Ăn, Thực Phẩm",
       iconURL:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/restaurant.png",
     },
     {
       id: "4",
       name: "Thể Thao & Du Lịch",
       iconURL:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/hiking.png",
     },
     {
       id: "5",
       name: "Sức Khỏe",
       iconURL:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/healthcare.png",
     },
     {
       id: "6",
       name: "Nhà Sách Online",
       iconURL:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/open-book.png",
     },
     {
       id: "7",
       name: "Thời Trang Nữ",
       iconURL:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/dress.png",
     },
     {
       id: "8",
       name: "Thiết Bị Điện Gia Dụng",
       iconURL:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/houseware.png",
     },
     {
       id: "9",
       name: "Thời Trang Nam",
       iconURL:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/male-clothes.png",
     },
     {
       id: "10",
       name: "Nhà Cửa & Đời Sống",
       iconURL:
-        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/car.png",
+        "https://van-bucket.s3.ap-southeast-1.amazonaws.com/images/originals/routine.png",
     },
   ];
 
   const handleSearch = async () => {
-    const server_host = "http://localhost:8000/api";
     try {
       const res = await axios.get(`${server_host}/search/${productName}`);
       const productData = res.data;
@@ -102,7 +120,7 @@ const Sidebar = ({ setProductsCallback }: SideBarProps) => {
             <MenuDepartment>
               <ul>
                 {categories.map((category) => (
-                  <li key={category.id}>
+                  <li key={category.id} onClick={() => setCateId(category.id)}>
                     <CategoryBox>
                       <CategoryIcon>
                         <Image
